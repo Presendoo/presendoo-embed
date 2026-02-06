@@ -1,6 +1,6 @@
 {
     "name": "presendoo-embed",
-    "version": "1.0.1",
+    "version": "1.0.0",
     "description": "Presendoo embed script for npm (typed) and CDN (plain JS).",
     "author": "Joren Lauryssen",
     "license": "MIT",
