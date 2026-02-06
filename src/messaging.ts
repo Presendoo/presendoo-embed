@@ -19,6 +19,10 @@ window.addEventListener('message', (event: MessageEvent<PresendooMessage>) => {
         case 'filters-updated':
         case 'update-view':
             forward('view-only', { action, payload });
+            forward('combined', { action, payload });
+            break;
+        case 'navigate-to-view':
+            forward('view-only', { action, payload });
             break;
         case 'show-unit':
             ensureOverlay();
