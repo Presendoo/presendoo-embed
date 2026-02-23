@@ -9,6 +9,7 @@ export interface PresendooConfig {
 export interface PresendooMessage {
     action: string;
     payload?: unknown;
+    target?: string[];
 }
 
 export interface PresendooAPI {
