@@ -1,6 +1,19 @@
 import { presendooState } from './config';
 import { createFrame } from './frames';
-import { AddFrameOptions, PresendooConfig } from './types';
+import { AddFrameOptions, PresendooAPI, PresendooConfig } from './types';
+
+declare global {
+    interface Window {
+        Presendoo: PresendooAPI;
+    }
+
+    // Allow top-level `Presendoo.setConfig(...)` (without `window.` prefix)
+    var Presendoo: PresendooAPI;
+
+    interface HTMLElement {
+        addFrame(opts: AddFrameOptions): HTMLIFrameElement;
+    }
+}
 
 const MOBILE_BREAKPOINT = 768;
 
