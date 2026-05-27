@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Presendoo Embed — Manual Test</title>
+    <style>
+      body {
+        font-family: sans-serif;
+        padding: 1rem;
+        background: #f5f5f5;
+        margin: 0;
+      }
+
+      .frame-container,
+      #presendoo-view,
+      #presendoo-view-responsive,
+      #presendoo-list {
+        width: 80vw;
+        max-width: 1200px;
+        height: auto;
+        aspect-ratio: 16/9;
+        border: 2px solid #333;
+        border-radius: 6px;
+        margin: 1rem auto;
+        overflow: hidden;
+        background: #fff;
+      }
+
+      .controls {
+        margin-bottom: 1rem;
+        display: flex;
+        gap: 0.5rem;
+        flex-wrap: wrap;
+      }
+
+      button {
+        padding: 0.5rem 1rem;
+        cursor: pointer;
+      }
+
+      h2 {
+        text-align: center;
+        margin-top: 2rem;
+      }
+    </style>
+    <script src="../../dist/presendoo-embed.js"></script>
+    <script>
+      Presendoo.setConfig({
+        project: 'loof_test',
+        baseUrl: 'http://localhost:5174',
+        ssl: false,
+      });
+    </script>
+  </head>
+  <body>
+    <h1>Presendoo Embed — Manual Test</h1>
+
+    <h2>Default (host-controlled 16:9)</h2>
+    <div id="presendoo-view"></div>
+
+    <h2>Responsive (overrides on mobile ≤768px)</h2>
+    <div id="presendoo-view-responsive"></div>
+
+    <script>
+      document.addEventListener('DOMContentLoaded', () => {
+        document
+          .getElementById('presendoo-view')
+          .addFrame({ type: 'view', unit_target: 'self' });
+        document
+          .getElementById('presendoo-view-responsive')
+          .addFrame({ type: 'view', unit_target: 'self', responsive: true });
+      });
+    </script>
+  </body>
+</html>

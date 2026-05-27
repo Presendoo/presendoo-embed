@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Presendoo Embed — Test Fixture</title>
+    <style>
+      body { margin: 0; font-family: sans-serif; }
+      #presendoo-view-default,
+      #presendoo-view-responsive,
+      #presendoo-list-default {
+        width: 80vw;
+        max-width: 1200px;
+        height: auto;
+        aspect-ratio: 16 / 9;
+        border: 2px solid #333;
+        margin: 1rem auto;
+        background: #fff;
+      }
+    </style>
+    <script src="../../dist/presendoo-embed.js"></script>
+    <script>
+      Presendoo.setConfig({ project: 'test', baseUrl: 'about:blank', ssl: false });
+    </script>
+  </head>
+  <body>
+    <div id="presendoo-view-default"></div>
+    <div id="presendoo-view-responsive"></div>
+    <div id="presendoo-list-default"></div>
+    <script>
+      document.addEventListener('DOMContentLoaded', () => {
+        document
+          .getElementById('presendoo-view-default')
+          .addFrame({ type: 'view', unit_target: 'self' });
+        document
+          .getElementById('presendoo-view-responsive')
+          .addFrame({ type: 'view', unit_target: 'self', responsive: true });
+        document
+          .getElementById('presendoo-list-default')
+          .addFrame({ type: 'list', unit_target: 'self' });
+      });
+    </script>
+  </body>
+</html>

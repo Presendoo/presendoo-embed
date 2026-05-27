@@ -1,5 +1,22 @@
 import { presendooState } from './config';
 
+const MOBILE_BREAKPOINT = 768;
+
+function applyResponsiveSizing(overlay: HTMLDivElement, iframe: HTMLIFrameElement): void {
+    const isMobile = window.innerWidth <= MOBILE_BREAKPOINT;
+    if (isMobile) {
+        overlay.style.padding = '0';
+        iframe.style.width = '95vw';
+        iframe.style.height = '90vh';
+        iframe.style.borderRadius = '8px';
+    } else {
+        overlay.style.padding = '2rem';
+        iframe.style.width = '90%';
+        iframe.style.height = '90%';
+        iframe.style.borderRadius = '8px';
+    }
+}
+
 export function ensureOverlay(): void {
     if (presendooState.overlay) return;
 
@@ -14,7 +31,6 @@ export function ensureOverlay(): void {
     display: none;
     justify-content: center;
     align-items: center;
-    padding: 2rem;
     box-sizing: border-box;
     z-index: 9999;
   `;
@@ -41,6 +57,7 @@ export function ensureOverlay(): void {
     padding: 0.5rem 1rem;
     cursor: pointer;
     font-weight: bold;
+    z-index: 1;
   `;
     closeBtn.onclick = () => {
         if (presendooState.overlay && presendooState.overlayFrame) {
@@ -51,10 +68,7 @@ export function ensureOverlay(): void {
 
     const iframe = document.createElement('iframe');
     iframe.style.cssText = `
-    width: 90%;
-    height: 90%;
     border: none;
-    border-radius: 8px;
     background: #fff;
     box-shadow: 0 0 20px rgba(0,0,0,0.5);
   `;
@@ -63,6 +77,10 @@ export function ensureOverlay(): void {
     inner.appendChild(iframe);
     overlay.appendChild(inner);
     document.body.appendChild(overlay);
+
+    applyResponsiveSizing(overlay, iframe);
+    window.addEventListener('resize', () => applyResponsiveSizing(overlay, iframe));
+    window.addEventListener('orientationchange', () => applyResponsiveSizing(overlay, iframe));
 
     presendooState.overlay = overlay;
     presendooState.overlayFrame = iframe;

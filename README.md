@@ -69,7 +69,10 @@ Available on any `HTMLElement`.
 ```
 element.addFrame({
     type: "view" | "list" | "all",
-    unit_target?: string // optional, default: "self"
+    unit_target?: string,  // optional, default: "self"
+    responsive?: boolean   // optional, default: false. When true, the container is
+                           // resized to 95vw × 90vh on viewports ≤768px (and the
+                           // host's aspect-ratio / max-width are overridden).
 });
 ```
 
@@ -124,6 +127,22 @@ No manual wiring needed unless you want to send custom messages.
 ```
 npm run build
 ```
+
+- **Dev server (watch + livereload + auto-opens manual test page)**
+
+```
+npm run dev
+```
+
+Opens `http://localhost:4000/test/manual/index.html`, rebuilds on save, reloads the browser. The test page loads `../../dist/presendoo-embed.js` via a relative path so it always reflects your latest build — no risk of loading a stale CDN bundle.
+
+- **Tests (Playwright, headless)**
+
+```
+npm test
+```
+
+Runs the responsive-sizing specs in `test/playwright/` across a mobile and desktop viewport. Builds first so the tests always exercise the current source.
 
 - **Lint & format**
 

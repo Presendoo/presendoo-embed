@@ -19,4 +19,5 @@ export interface PresendooAPI {
 export interface AddFrameOptions {
     type: FrameType;
     unit_target?: string;
+    responsive?: boolean;
 }

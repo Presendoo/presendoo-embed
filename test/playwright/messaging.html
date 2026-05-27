@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Presendoo Embed — Messaging Test Fixture</title>
+    <style>
+      body { margin: 0; font-family: sans-serif; }
+      .slot { width: 80vw; max-width: 1200px; height: 200px; margin: 1rem auto; border: 1px solid #ccc; }
+    </style>
+    <script src="../../dist/presendoo-embed.js"></script>
+    <script>
+      Presendoo.setConfig({ project: 'test', baseUrl: 'about:blank', ssl: false });
+
+      window.__received = {};
+
+      // Mount a frame, then redirect its src to about:blank so the inner window
+      // stays same-origin with the parent and we can spy on postMessage.
+      // Resolves once the spy is attached.
+      window.__mount = function (parentId, type) {
+        const el = document.getElementById(parentId);
+        const frame = el.addFrame({ type, unit_target: 'self' });
+        const ft = frame.getAttribute('data-presendoo-frame');
+        window.__received[ft] = [];
+
+        return new Promise((resolve) => {
+          const attachSpy = () => {
+            const cw = frame.contentWindow;
+            if (!cw) {
+              resolve(frame);
+              return;
+            }
+            try {
+              const orig = cw.postMessage.bind(cw);
+              cw.postMessage = function (msg, ...rest) {
+                window.__received[ft].push(msg);
+                return orig(msg, ...rest);
+              };
+            } catch (_) {
+              // cross-origin; skip spy
+            }
+            resolve(frame);
+          };
+
+          frame.addEventListener('load', attachSpy, { once: true });
+          frame.src = 'about:blank';
+        });
+      };
+
+      // Convenience: emit a message exactly the way an inner frame would.
+      window.__send = function (msg) {
+        window.postMessage(msg, '*');
+      };
+    </script>
+  </head>
+  <body>
+    <div id="solo" class="slot"></div>
+    <div id="split-view" class="slot"></div>
+    <div id="split-list" class="slot"></div>
+  </body>
+</html>
