@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Presendoo Embed — Scroll Lock Test Fixture</title>
+    <style>
+      body { margin: 16px; font-family: sans-serif; }
+      #above { height: 1500px; background: linear-gradient(#eee, #999); }
+      #marker { height: 40px; background: #c33; }
+      #below { height: 3000px; background: linear-gradient(#999, #eee); }
+    </style>
+    <script src="../../dist/presendoo-embed.js"></script>
+    <script>
+      Presendoo.setConfig({ project: 'test', baseUrl: 'about:blank', ssl: false });
+      window.__send = function (msg) {
+        window.postMessage(msg, '*');
+      };
+    </script>
+  </head>
+  <body>
+    <div id="above"></div>
+    <div id="marker"></div>
+    <div id="below"></div>
+  </body>
+</html>

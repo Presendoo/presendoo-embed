@@ -1,5 +1,4 @@
-import { ensureOverlay } from './overlay';
-import { presendooState, resolveBaseUrl } from './config';
+import { showOverlay } from './overlay';
 import { forward } from './frames';
 import { PresendooMessage } from './types';
 
@@ -15,12 +14,7 @@ window.addEventListener('message', (event: MessageEvent<PresendooMessage>) => {
             if (t === 'overlay') {
                 // Special case: overlay is not a frame forward
                 if (action === 'show-unit') {
-                    ensureOverlay();
-                    if (presendooState.overlay && presendooState.overlayFrame) {
-                        const origin = resolveBaseUrl();
-                        presendooState.overlayFrame.src = `${origin}/${(payload as { url: string }).url}?framed=1&frame-type=unit-view`;
-                        presendooState.overlay.style.display = 'flex';
-                    }
+                    showOverlay((payload as { url: string }).url);
                 }
             } else {
                 forward(t, { action, payload });
@@ -48,12 +42,7 @@ window.addEventListener('message', (event: MessageEvent<PresendooMessage>) => {
             forward('view-only', { action, payload });
             break;
         case 'show-unit':
-            ensureOverlay();
-            if (presendooState.overlay && presendooState.overlayFrame) {
-                const origin = resolveBaseUrl();
-                presendooState.overlayFrame.src = `${origin}/${(payload as { url: string }).url}?framed=1&frame-type=unit-view`;
-                presendooState.overlay.style.display = 'flex';
-            }
+            showOverlay((payload as { url: string }).url);
             break;
     }
 });

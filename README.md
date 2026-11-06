@@ -108,7 +108,7 @@ The embed script automatically listens for messages between frames and handles:
 
 - `update-view`
 
-- `show-unit` (opens overlay with unit details)
+- `show-unit` (opens overlay with unit details, and locks the host page's scroll until it closes)
 
 No manual wiring needed unless you want to send custom messages.
 

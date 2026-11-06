@@ -1,4 +1,5 @@
-import { presendooState } from './config';
+import { presendooState, resolveBaseUrl } from './config';
+import { lockHostScroll, unlockHostScroll } from './scroll-lock';
 
 const MOBILE_BREAKPOINT = 768;
 
@@ -28,6 +29,7 @@ export function ensureOverlay(): void {
     position: fixed;
     top: 0;
     left: 0;
+    overscroll-behavior: contain;
     display: none;
     justify-content: center;
     align-items: center;
@@ -59,12 +61,7 @@ export function ensureOverlay(): void {
     font-weight: bold;
     z-index: 1;
   `;
-    closeBtn.onclick = () => {
-        if (presendooState.overlay && presendooState.overlayFrame) {
-            presendooState.overlay.style.display = 'none';
-            presendooState.overlayFrame.src = '';
-        }
-    };
+    closeBtn.onclick = hideOverlay;
 
     const iframe = document.createElement('iframe');
     iframe.style.cssText = `
@@ -84,4 +81,46 @@ export function ensureOverlay(): void {
 
     presendooState.overlay = overlay;
     presendooState.overlayFrame = iframe;
+}
+
+/**
+ * A host page that re-renders its <body> can drop the overlay while it is open.
+ * Nothing could close it after that, so the scroll lock has to go with it.
+ */
+let removalObserver: MutationObserver | null = null;
+
+function releaseWhenRemoved(overlay: HTMLDivElement): void {
+    if (removalObserver) return;
+    removalObserver = new MutationObserver(() => {
+        if (overlay.isConnected) return;
+        stopWatchingForRemoval();
+        unlockHostScroll();
+        presendooState.overlay = null;
+        presendooState.overlayFrame = null;
+    });
+    removalObserver.observe(document.body, { childList: true });
+}
+
+function stopWatchingForRemoval(): void {
+    removalObserver?.disconnect();
+    removalObserver = null;
+}
+
+export function showOverlay(url: string): void {
+    ensureOverlay();
+    const { overlay, overlayFrame } = presendooState;
+    if (!overlay || !overlayFrame) return;
+    overlayFrame.src = `${resolveBaseUrl()}/${url}?framed=1&frame-type=unit-view`;
+    overlay.style.display = 'flex';
+    lockHostScroll();
+    releaseWhenRemoved(overlay);
+}
+
+export function hideOverlay(): void {
+    const { overlay, overlayFrame } = presendooState;
+    if (!overlay || !overlayFrame) return;
+    overlay.style.display = 'none';
+    overlayFrame.src = '';
+    stopWatchingForRemoval();
+    unlockHostScroll();
 }
