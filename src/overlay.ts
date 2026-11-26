@@ -1,5 +1,6 @@
 import { presendooState, resolveBaseUrl } from './config';
 import { lockHostScroll, unlockHostScroll } from './scroll-lock';
+import { sendLeadSourceOnLoad, utmQuerySuffix } from './lead-source';
 
 const MOBILE_BREAKPOINT = 768;
 
@@ -80,6 +81,7 @@ export function ensureOverlay(): void {
     window.addEventListener('orientationchange', () => applyResponsiveSizing(overlay, iframe));
 
     presendooState.overlay = overlay;
+    sendLeadSourceOnLoad(iframe);
     presendooState.overlayFrame = iframe;
 }
 
@@ -110,7 +112,7 @@ export function showOverlay(url: string): void {
     ensureOverlay();
     const { overlay, overlayFrame } = presendooState;
     if (!overlay || !overlayFrame) return;
-    overlayFrame.src = `${resolveBaseUrl()}/${url}?framed=1&frame-type=unit-view`;
+    overlayFrame.src = `${resolveBaseUrl()}/${url}?framed=1&frame-type=unit-view${utmQuerySuffix()}`;
     overlay.style.display = 'flex';
     lockHostScroll();
     releaseWhenRemoved(overlay);

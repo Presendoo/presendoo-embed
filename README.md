@@ -114,6 +114,16 @@ No manual wiring needed unless you want to send custom messages.
 
 ---
 
+### 📈 Campaign tracking (UTM)
+
+Nothing to configure. If the page that embeds Presendoo was opened with
+`utm_source`, `utm_medium`, `utm_campaign`, `utm_term` or `utm_content`
+in its address, the embed passes them, together with the page address,
+to the Presendoo frames. A contact-form lead then carries them, so they
+reach your CRM or webhook. Other query parameters are not passed on.
+
+---
+
 ### 🌐 CDN URLs
 
 - Always latest: https://cdn.jsdelivr.net/npm/presendoo-embed/dist/presendoo-embed.min.js
