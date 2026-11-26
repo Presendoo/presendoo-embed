@@ -108,9 +108,19 @@ The embed script automatically listens for messages between frames and handles:
 
 - `update-view`
 
-- `show-unit` (opens overlay with unit details)
+- `show-unit` (opens overlay with unit details, and locks the host page's scroll until it closes)
 
 No manual wiring needed unless you want to send custom messages.
+
+---
+
+### 📈 Campaign tracking (UTM)
+
+Nothing to configure. If the page that embeds Presendoo was opened with
+`utm_source`, `utm_medium`, `utm_campaign`, `utm_term` or `utm_content`
+in its address, the embed passes them, together with the page address,
+to the Presendoo frames. A contact-form lead then carries them, so they
+reach your CRM or webhook. Other query parameters are not passed on.
 
 ---
 

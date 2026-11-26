@@ -1,5 +1,6 @@
 import { presendooState, resolveBaseUrl } from './config';
 import { FrameType } from './types';
+import { sendLeadSourceOnLoad, utmQuerySuffix } from './lead-source';
 
 const frameTypeMap: Record<FrameType, string> = {
     view: 'view-only',
@@ -24,7 +25,8 @@ export function createFrame({
 
     const origin = resolveBaseUrl();
     const iframe = document.createElement('iframe');
-    iframe.src = `${origin}?framed=1&frame-type=${resolvedType}&unit-target=${unit_target}`;
+    iframe.src = `${origin}?framed=1&frame-type=${resolvedType}&unit-target=${unit_target}${utmQuerySuffix()}`;
+    sendLeadSourceOnLoad(iframe);
     iframe.style.width = '100%';
     iframe.style.height = '100%';
     iframe.style.border = '0';
